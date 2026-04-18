@@ -613,7 +613,7 @@ function gasCall(params){
       const s = document.getElementById(cbName);
       if(s) s.remove();
       reject(new Error('timeout'));
-    }, 15000);
+    }, 20000);
 
     window[cbName] = (data)=>{
       clearTimeout(timeout);
@@ -623,8 +623,13 @@ function gasCall(params){
       resolve(data);
     };
 
-    const p = {...params, callback: cbName};
-    const url = GAS_URL + '?' + new URLSearchParams(p);
+    // パラメータを手動で組み立て（dataのみ個別エンコード）
+    let qs = 'callback=' + encodeURIComponent(cbName);
+    for(const [k,v] of Object.entries(params)){
+      qs += '&' + encodeURIComponent(k) + '=' + encodeURIComponent(v);
+    }
+    const url = GAS_URL + '?' + qs;
+
     const script = document.createElement('script');
     script.id = cbName;
     script.src = url;
@@ -676,7 +681,11 @@ async function saveBooking(booking){
   try {
     await gasCall({action:'saveBooking', data:JSON.stringify(booking)});
     await loadBookings();
-  } catch(e){ alert('保存に失敗しました。通信環境を確認してください。'); hideLoading(); }
+  } catch(e){
+    console.error('saveBooking error:', e);
+    alert('保存に失敗しました。\nエラー: ' + e.message);
+    hideLoading();
+  }
 }
 
 async function updateSubjectGas(id, subject){
