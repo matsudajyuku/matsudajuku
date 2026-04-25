@@ -751,7 +751,7 @@ function goTop(){
   ['studentScreen','teacherScreen','viewScreen'].forEach(s=>{document.getElementById(s).className='screen';});
 }
 async function enterStudent(){ showScreen('studentScreen'); weeks.s=getNextMon(); resetStudentState(); renderStudent(); }
-async function enterView(){ showScreen('viewScreen'); weeks.v=getMon(new Date()); await loadBookings(); renderView(); }
+async function enterView(){ showScreen('viewScreen'); weeks.v=getNextMon(); await loadBookings(); renderView(); }
 async function enterTeacher(){ showScreen('teacherScreen'); weeks.t=getMon(new Date()); await loadBookings(); renderTeacher(); }
 
 // ===== 週ナビ =====
