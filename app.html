@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>マツダ塾 授業予約</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap');
+
+:root {
+  --blue:#2563eb;--blue-l:#dbeafe;--blue-d:#1e40af;
+  --green:#16a34a;--green-l:#dcfce7;
+  --orange:#ea580c;--orange-l:#fff7ed;
+  --red:#dc2626;--red-l:#fee2e2;
+  --purple:#7c3aed;--purple-l:#ede9fe;
+  --teal:#0d9488;--teal-l:#ccfbf1;
+  --gray-50:#f9fafb;--gray-100:#f3f4f6;--gray-200:#e5e7eb;
+  --gray-300:#d1d5db;--gray-400:#9ca3af;--gray-500:#6b7280;
+  --gray-700:#374151;--gray-900:#111827;
+  --sh:0 1px 3px rgba(0,0,0,.08);--sh-md:0 4px 6px rgba(0,0,0,.07);--sh-lg:0 10px 20px rgba(0,0,0,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--gray-50);color:var(--gray-900);min-height:100vh;font-size:14px;}
+.screen{display:none;}
+.screen.active{display:block;}
+
+/* ===== TOP ===== */
+#topScreen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px;gap:0;}
+.top-logo{font-size:30px;font-weight:700;color:var(--blue);letter-spacing:.04em;margin-bottom:6px;}
+.top-tagline{font-size:13px;color:var(--gray-400);margin-bottom:32px;}
+.mode-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;max-width:440px;margin-bottom:16px;}
+.mode-card{background:white;border:2px solid var(--gray-200);border-radius:16px;padding:26px 16px;text-align:center;cursor:pointer;transition:all .18s;box-shadow:var(--sh);}
+.mode-card:hover{transform:translateY(-3px);box-shadow:var(--sh-md);}
+.mc-s:hover{border-color:var(--blue);}
+.mc-t{border-color:var(--orange-l);}
+.mc-t:hover{border-color:var(--orange);background:var(--orange-l);}
+.mode-icon{font-size:36px;margin-bottom:10px;}
+.mode-title{font-weight:700;font-size:14px;margin-bottom:4px;}
+.mode-desc{font-size:11px;color:var(--gray-400);}
+.view-link{font-size:13px;color:var(--blue);cursor:pointer;text-decoration:underline;}
+
+/* ===== ヘッダー ===== */
+.header{background:white;border-bottom:1px solid var(--gray-200);padding:0 16px;height:50px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:var(--sh);}
+.h-left{display:flex;align-items:center;gap:8px;}
+.h-logo{font-weight:700;font-size:14px;color:var(--blue);}
+.h-pill{padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;}
+.pill-s{background:var(--blue-l);color:var(--blue-d);}
+.pill-t{background:var(--orange-l);color:var(--orange);}
+.pill-v{background:var(--green-l);color:var(--green);}
+.back-btn{background:none;border:none;cursor:pointer;color:var(--gray-500);font-size:12px;padding:6px 8px;border-radius:6px;font-family:inherit;}
+.back-btn:hover{background:var(--gray-100);}
+
+/* ===== メイン ===== */
+.main{max-width:680px;margin:0 auto;padding:16px;}
+
+/* ===== バナー ===== */
+.banner{border-radius:10px;padding:11px 14px;margin-bottom:14px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px;}
+.b-open{background:var(--green-l);border:1px solid #86efac;color:var(--green);}
+.b-closed{background:var(--red-l);border:1px solid #fca5a5;color:var(--red);}
+
+/* ===== 週ナビ ===== */
+.week-bar{background:white;border:1px solid var(--gray-200);border-radius:12px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:10px;box-shadow:var(--sh);flex-wrap:wrap;}
+.week-nav{display:flex;align-items:center;gap:8px;}
+.week-text{font-weight:700;font-size:14px;color:var(--blue);min-width:190px;text-align:center;}
+.nav-btn{background:var(--blue-l);color:var(--blue);border:none;border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:13px;}
+.nav-btn:hover{background:#bfdbfe;}
+.week-sub-btn{background:none;border:1px solid var(--gray-300);border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;color:var(--gray-600);font-family:inherit;}
+
+/* ===== カード ===== */
+.card{background:white;border:1px solid var(--gray-200);border-radius:12px;padding:18px;margin-bottom:14px;box-shadow:var(--sh);}
+.card-title{font-weight:700;font-size:13px;color:var(--gray-700);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+
+/* ===== フォーム ===== */
+.form-label{display:block;font-size:11px;font-weight:600;color:var(--gray-500);margin-bottom:5px;letter-spacing:.04em;}
+.form-control{width:100%;padding:10px 12px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:14px;font-family:inherit;color:var(--gray-900);background:white;transition:border-color .15s;}
+.form-control:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.1);}
+select.form-control{cursor:pointer;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.form-group{margin-bottom:12px;}
+.input-wrap{position:relative;}
+.suggestions{position:absolute;background:white;border:1px solid var(--gray-200);border-radius:8px;box-shadow:var(--sh-md);max-height:160px;overflow-y:auto;z-index:300;width:100%;top:calc(100% + 2px);left:0;}
+.sug-item{padding:9px 12px;cursor:pointer;font-size:13px;}
+.sug-item:hover{background:var(--blue-l);color:var(--blue-d);}
+
+/* ===== 校舎選択 ===== */
+.campus-select-group{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
+.campus-btn{border:2px solid var(--gray-200);border-radius:12px;padding:14px 8px;text-align:center;cursor:pointer;transition:all .15s;background:white;}
+.campus-btn:hover{border-color:var(--blue);background:var(--blue-l);}
+.campus-btn.active-kyujyu{border-color:var(--blue);background:var(--blue-l);}
+.campus-btn.active-hita{border-color:var(--green);background:var(--green-l);}
+.campus-btn.active-online{border-color:var(--purple);background:var(--purple-l);}
+.campus-icon{font-size:24px;margin-bottom:6px;}
+.campus-name{font-size:12px;font-weight:700;}
+.campus-sub{font-size:10px;color:var(--gray-400);margin-top:2px;}
+
+/* コマ選択：通塾=青、OL=緑 */
+.check-btn.sel-tsuko{background:#eff6ff !important;}
+.check-btn.sel-tsuko .check-lbl{opacity:1;background:var(--blue-l);color:var(--blue-d);}
+.check-btn.sel-online{background:#f0fdf4 !important;}
+.check-btn.sel-online .check-lbl{opacity:1;background:var(--green-l);color:var(--green);}
+
+/* ポップアップ */
+.type-popup{position:fixed;background:white;border:1px solid var(--gray-200);border-radius:12px;box-shadow:var(--sh-lg);padding:8px;z-index:9999;display:none;flex-direction:column;gap:5px;min-width:130px;}
+.type-popup.show{display:flex;}
+.tp-btn{padding:10px 14px;border:none;border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;text-align:left;}
+.tp-tsuko{background:var(--blue-l);color:var(--blue-d);}
+.tp-tsuko:hover{background:#bfdbfe;}
+.tp-online{background:var(--green-l);color:var(--green);}
+.tp-online:hover{background:#bbf7d0;}
+.tp-clear{background:var(--gray-100);color:var(--gray-500);}
+.tp-clear:hover{background:var(--gray-200);}
+
+/* ===== ボタン ===== */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:9px 18px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .15s;font-family:inherit;white-space:nowrap;}
+.btn-primary{background:var(--blue);color:white;}
+.btn-primary:hover{background:var(--blue-d);}
+.btn-primary:disabled{background:var(--gray-300);cursor:not-allowed;}
+.btn-success{background:var(--green);color:white;}
+.btn-success:hover{background:#15803d;}
+.btn-outline{background:white;color:var(--gray-700);border:1px solid var(--gray-300);}
+.btn-outline:hover{background:var(--gray-50);}
+.btn-danger{background:var(--red);color:white;}
+.btn-sm{padding:5px 10px;font-size:12px;border-radius:6px;}
+.btn-block{width:100%;justify-content:center;padding:13px;font-size:14px;border-radius:10px;margin-bottom:20px;}
+
+/* ===== グリッド ===== */
+.grid-wrap{overflow-x:auto;}
+table.sched{width:100%;border-collapse:collapse;min-width:280px;}
+table.sched th{padding:8px 4px;text-align:center;font-size:11px;font-weight:700;color:var(--gray-700);background:var(--gray-50);border-bottom:2px solid var(--gray-200);white-space:nowrap;}
+table.sched th.time-th{text-align:right;font-size:10px;font-weight:500;color:var(--gray-400);min-width:64px;padding-right:8px;}
+table.sched td{padding:0;border-bottom:1px solid var(--gray-100);border-right:1px solid var(--gray-100);}
+table.sched td:last-child{border-right:none;}
+table.sched tr:last-child td{border-bottom:none;}
+.time-cell{padding:6px 8px 6px 4px;background:var(--gray-50);text-align:right;vertical-align:middle;}
+.koma-lbl{font-size:14px;font-weight:700;color:var(--gray-800);display:block;line-height:1.2;}
+.time-lbl{font-size:9px;color:var(--gray-400);}
+.check-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px 2px;cursor:pointer;min-height:52px;width:100%;border:none;background:transparent;transition:background .1s;}
+.check-btn:hover{background:var(--gray-50);}
+.check-btn.sel-on{background:#eff6ff!important;}
+.check-icon{font-size:18px;line-height:1;}
+.check-lbl{font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;opacity:0;}
+.check-btn.sel-on .check-lbl{opacity:1;background:var(--blue-l);color:var(--blue-d);}
+
+/* ===== 先生画面テーブル ===== */
+.bc{background:white;border:1px solid var(--gray-200);border-radius:12px;overflow:hidden;box-shadow:var(--sh);margin-bottom:12px;}
+.bc-head{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--gray-50);border-bottom:1px solid var(--gray-100);}
+.bc-title{font-weight:700;font-size:13px;display:flex;align-items:center;gap:7px;}
+.badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:5px;font-size:11px;font-weight:600;}
+.b-k{background:var(--blue-l);color:var(--blue-d);}
+.b-h{background:var(--green-l);color:var(--green);}
+.b-ol{background:var(--purple-l);color:var(--purple);}
+.b-tsuko{background:var(--blue-l);color:var(--blue-d);}
+.b-online{background:var(--teal-l);color:var(--teal);}
+table.bt{width:100%;border-collapse:collapse;}
+table.bt th{background:var(--gray-50);padding:7px 12px;text-align:left;font-size:11px;font-weight:600;color:var(--gray-500);border-bottom:1px solid var(--gray-200);}
+table.bt td{padding:10px 12px;border-bottom:1px solid var(--gray-100);vertical-align:middle;}
+table.bt tr:last-child td{border-bottom:none;}
+table.bt tr:hover td{background:var(--gray-50);}
+.koma{font-family:'DM Mono',monospace;background:var(--gray-100);padding:2px 6px;border-radius:4px;font-size:12px;}
+.subj{display:inline-block;padding:2px 8px;border-radius:5px;font-size:12px;font-weight:500;}
+.sm{background:#fef3c7;color:#92400e;}.se{background:#dbeafe;color:#1e40af;}.sj{background:#fce7f3;color:#9d174d;}
+.ss{background:#d1fae5;color:#065f46;}.sso{background:#ede9fe;color:#5b21b6;}.so{background:var(--gray-100);color:var(--gray-700);}
+.campus-divider{padding:6px 14px;font-size:12px;font-weight:600;color:var(--gray-500);background:var(--gray-50);display:flex;align-items:center;gap:6px;border-top:1px solid var(--gray-100);border-bottom:1px solid var(--gray-100);}
+.subj-sel{width:110px;padding:4px 6px;border:1.5px solid var(--gray-200);border-radius:6px;font-size:12px;font-family:inherit;background:white;cursor:pointer;}
+.subj-sel:focus{outline:none;border-color:var(--blue);}
+.empty{padding:30px;text-align:center;color:var(--gray-400);font-size:13px;}
+
+/* ===== PDF出力ボタングループ ===== */
+.pdf-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.pdf-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .15s;}
+.pdf-k{background:var(--blue-l);color:var(--blue-d);}
+.pdf-k:hover{background:#bfdbfe;}
+.pdf-h{background:var(--green-l);color:var(--green);}
+.pdf-h:hover{background:#bbf7d0;}
+.pdf-ol{background:var(--purple-l);color:var(--purple);}
+.pdf-ol:hover{background:#ddd6fe;}
+
+/* ===== 完了 ===== */
+.done-wrap{text-align:center;padding:40px 20px;}
+.done-icon{font-size:52px;margin-bottom:14px;}
+.done-title{font-size:19px;font-weight:700;margin-bottom:6px;}
+.done-sub{font-size:13px;color:var(--gray-500);margin-bottom:20px;line-height:1.7;}
+.summary-box{background:var(--blue-l);border:1px solid #bfdbfe;border-radius:12px;padding:14px;margin-bottom:20px;text-align:left;}
+.sum-title{font-weight:700;font-size:13px;color:var(--blue-d);margin-bottom:8px;}
+.sum-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(37,99,235,.1);font-size:13px;}
+.sum-row:last-child{border-bottom:none;}
+.s-day{font-weight:600;min-width:28px;}
+.s-koma{font-family:'DM Mono',monospace;background:white;padding:1px 6px;border-radius:4px;font-size:12px;}
+.s-type{padding:1px 7px;border-radius:4px;font-size:11px;font-weight:600;}
+
+/* ===== オーバーレイ ===== */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center;padding:20px;}
+.overlay.on{display:flex;}
+.modal{background:white;border-radius:16px;padding:26px;width:100%;max-width:340px;box-shadow:var(--sh-lg);}
+.modal-lg{max-width:460px;}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:18px;}
+.modal-actions{display:flex;gap:8px;margin-top:18px;justify-content:flex-end;}
+
+
+
+@media(max-width:500px){
+  .form-row{grid-template-columns:1fr;}
+  .mode-cards{grid-template-columns:1fr;}
+  .week-text{min-width:150px;font-size:13px;}
+  .main{padding:12px;}
+  .campus-select-group{grid-template-columns:1fr 1fr 1fr;}
+  .pdf-btns{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== TOP ===== -->
+<div id="topScreen">
+  <div class="top-logo">マツダ塾</div>
+  <div class="top-tagline">授業予約システム</div>
+  <div class="mode-cards">
+    <div class="mode-card mc-s" onclick="enterStudent()">
+      <div class="mode-icon">✏️</div>
+      <div class="mode-title">授業を予約する</div>
+      <div class="mode-desc">生徒・保護者の方はこちら</div>
+    </div>
+    <div class="mode-card mc-t" onclick="openPwModal()">
+      <div class="mode-icon">🔑</div>
+      <div class="mode-title">先生メニュー</div>
+      <div class="mode-desc">教科入力・管理はこちら</div>
+    </div>
+  </div>
+  <span class="view-link" onclick="enterView()">📋 予定表を確認する</span>
+</div>
+
+<!-- ===== 生徒画面 ===== -->
+<div id="studentScreen" class="screen">
+  <header class="header">
+    <div class="h-left">
+      <button class="back-btn" onclick="goTop()">← 戻る</button>
+      <span class="h-logo">マツダ塾</span>
+      <span class="h-pill pill-s">予約入力</span>
+    </div>
+  </header>
+  <div class="main">
+    <div id="s_banner"></div>
+    <div class="week-bar">
+      <span style="font-size:12px;font-weight:500;color:var(--gray-500);">📅 予約週</span>
+      <div class="week-nav">
+        <button class="nav-btn" onclick="changeWeek('s',-1)">◀</button>
+        <span class="week-text" id="s_weekText">---</span>
+        <button class="nav-btn" onclick="changeWeek('s',1)">▶</button>
+      </div>
+      <button class="week-sub-btn" onclick="setNextWeek()">来週</button>
+    </div>
+
+    <div id="s_form">
+      <!-- 名前・学年 -->
+      <div class="card">
+        <div class="card-title">👤 お名前・学年</div>
+        <div class="form-row">
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">お名前</label>
+            <div class="input-wrap">
+              <input type="text" class="form-control" id="s_name" placeholder="名前を入力"
+                oninput="showSug(this.value,'s_sug','s_name')" onblur="setTimeout(()=>hideSug('s_sug'),160)" autocomplete="off">
+              <div class="suggestions" id="s_sug" style="display:none;"></div>
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">学年</label>
+            <select class="form-control" id="s_grade">
+              <option value="">選択してください</option>
+              <optgroup label="小学生">
+                <option value="小1">小1</option><option value="小2">小2</option>
+                <option value="小3">小3</option><option value="小4">小4</option>
+                <option value="小5">小5</option><option value="小6">小6</option>
+              </optgroup>
+              <optgroup label="中学生">
+                <option value="中1">中1</option><option value="中2">中2</option>
+                <option value="中3">中3</option>
+              </optgroup>
+              <optgroup label="高校生">
+                <option value="高1">高1</option><option value="高2">高2</option>
+                <option value="高3">高3</option>
+              </optgroup>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- 校舎選択 -->
+      <div class="card">
+        <div class="card-title">🏫 校舎を選んでください</div>
+        <div class="campus-select-group">
+          <div class="campus-btn" id="cb_kyujyu" onclick="selectCampus('kyujyu')">
+            <div class="campus-icon">🏔️</div>
+            <div class="campus-name">九重本校</div>
+            <div class="campus-sub">通塾 or OL</div>
+          </div>
+          <div class="campus-btn" id="cb_hita" onclick="selectCampus('hita')">
+            <div class="campus-icon">🌊</div>
+            <div class="campus-name">日田校</div>
+            <div class="campus-sub">通塾 or OL</div>
+          </div>
+          <div class="campus-btn" id="cb_online" onclick="selectCampus('online')">
+            <div class="campus-icon">💻</div>
+            <div class="campus-name">オンライン</div>
+            <div class="campus-sub">専用</div>
+          </div>
+        </div>
+        <div id="campus_hint" style="display:none;font-size:12px;color:var(--gray-500);margin-top:8px;">
+          コマをタップして <strong>通塾</strong> か <strong>オンライン</strong> を選んでください。コマごとに選択できます。
+        </div>
+        <div id="online_hint" style="display:none;font-size:12px;color:var(--gray-500);margin-top:8px;">
+          コマをタップして選択してください。
+        </div>
+      </div>
+
+      <!-- 平日グリッド -->
+      <div class="card" style="padding:14px 14px 0;" id="s_weekCard">
+        <div class="card-title">📋 平日（月〜金）<span style="font-size:10px;font-weight:400;color:var(--gray-400);margin-left:4px;">コマをタップして選択</span></div>
+        <div class="grid-wrap">
+          <table class="sched">
+            <thead><tr>
+              <th class="time-th">時間</th>
+              <th>月</th><th>火</th><th>水</th><th>木</th><th>金</th>
+            </tr></thead>
+            <tbody id="s_weekBody"></tbody>
+          </table>
+        </div>
+        <div style="height:12px;"></div>
+      </div>
+
+      <!-- 土曜グリッド -->
+      <div class="card" style="padding:14px 14px 0;" id="s_satCard">
+        <div class="card-title">📋 土曜日</div>
+        <div class="grid-wrap">
+          <table class="sched">
+            <thead><tr>
+              <th class="time-th">時間</th>
+              <th>土</th>
+            </tr></thead>
+            <tbody id="s_satBody"></tbody>
+          </table>
+        </div>
+        <div style="height:12px;"></div>
+      </div>
+
+      <!-- 要望 -->
+      <div class="card">
+        <div class="card-title">💬 要望・連絡事項</div>
+        <textarea class="form-control" id="s_request" rows="3" style="resize:vertical;"
+          placeholder="お休みの連絡、変更希望など"></textarea>
+      </div>
+
+      <button class="btn btn-primary btn-block" id="s_submitBtn" onclick="submitStudent()">送信する →</button>
+    </div>
+
+    <!-- 完了 -->
+    <div id="s_done" style="display:none;">
+      <div class="done-wrap">
+        <div class="done-icon">✅</div>
+        <div class="done-title">送信しました！</div>
+        <div class="done-sub">先生が確認して教科を入力します。<br>「予定表を確認する」で確定内容を見られます。</div>
+        <div class="summary-box" id="s_summary"></div>
+        <button class="btn btn-outline" onclick="resetStudent()">← もう一度入力する</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 先生画面 ===== -->
+<div id="teacherScreen" class="screen">
+  <header class="header">
+    <div class="h-left">
+      <button class="back-btn" onclick="goTop()">← 戻る</button>
+      <span class="h-logo">マツダ塾</span>
+      <span class="h-pill pill-t">先生メニュー</span>
+    </div>
+    <div style="display:flex;gap:6px;align-items:center;">
+      <button class="btn btn-outline btn-sm" onclick="openTeacherAdd()">＋ 追加</button>
+    </div>
+  </header>
+  <div class="main">
+    <div class="week-bar">
+      <span style="font-size:12px;font-weight:500;color:var(--gray-500);">📅 表示週</span>
+      <div class="week-nav">
+        <button class="nav-btn" onclick="changeWeek('t',-1)">◀</button>
+        <span class="week-text" id="t_weekText">---</span>
+        <button class="nav-btn" onclick="changeWeek('t',1)">▶</button>
+      </div>
+      <button class="week-sub-btn" onclick="setCurrentWeek('t')">今週</button>
+    </div>
+
+    <!-- PDF出力ボタン -->
+    <div class="card" style="padding:14px 16px;">
+      <div class="card-title" style="margin-bottom:10px;">🖨️ PDF出力</div>
+      <div class="pdf-btns">
+        <button class="pdf-btn pdf-k" onclick="printCampus('kyujyu')">🏔️ 九重本校 PDF</button>
+        <button class="pdf-btn pdf-h" onclick="printCampus('hita')">🌊 日田校 PDF</button>
+        <button class="pdf-btn pdf-ol" onclick="printCampus('online')">💻 オンライン PDF</button>
+      </div>
+    </div>
+
+    <div id="t_list"></div>
+  </div>
+</div>
+
+<!-- ===== 確認画面 ===== -->
+<div id="viewScreen" class="screen">
+  <header class="header">
+    <div class="h-left">
+      <button class="back-btn" onclick="goTop()">← 戻る</button>
+      <span class="h-logo">マツダ塾</span>
+      <span class="h-pill pill-v">予定確認</span>
+    </div>
+  </header>
+  <div class="main">
+    <div class="week-bar">
+      <span style="font-size:12px;font-weight:500;color:var(--gray-500);">📅 表示週</span>
+      <div class="week-nav">
+        <button class="nav-btn" onclick="changeWeek('v',-1)">◀</button>
+        <span class="week-text" id="v_weekText">---</span>
+        <button class="nav-btn" onclick="changeWeek('v',1)">▶</button>
+      </div>
+      <button class="week-sub-btn" onclick="setCurrentWeek('v')">今週</button>
+    </div>
+
+    <!-- 名前入力 -->
+    <div class="card">
+      <div class="card-title">👤 お名前を入力してください</div>
+      <div style="display:flex;gap:8px;align-items:flex-start;">
+        <div class="input-wrap" style="flex:1;">
+          <input type="text" class="form-control" id="v_name" placeholder="名前を入力"
+            oninput="showSug(this.value,'v_sug','v_name');renderView()"
+            onblur="setTimeout(()=>hideSug('v_sug'),160)" autocomplete="off">
+          <div class="suggestions" id="v_sug" style="display:none;"></div>
+        </div>
+        <button class="btn btn-success" onclick="printStudentSchedule()" style="flex-shrink:0;">🖨️ PDF</button>
+      </div>
+    </div>
+
+    <div id="v_list"></div>
+  </div>
+</div>
+
+<!-- コマ選択ポップアップ -->
+<div class="type-popup" id="typePopup">
+  <button class="tp-btn tp-tsuko" onclick="selectType('tsuko')">🏫 通塾</button>
+  <button class="tp-btn tp-online" onclick="selectType('online')">💻 オンライン</button>
+  <button class="tp-btn tp-clear" onclick="selectType('clear')">✕ 取り消し</button>
+</div>
+
+<!-- パスワードモーダル -->
+<div class="overlay" id="pwModal">
+  <div class="modal">
+    <div class="modal-title">🔑 先生メニュー</div>
+    <div class="form-group">
+      <label class="form-label">パスワード</label>
+      <input type="password" class="form-control" id="pwInput" placeholder="パスワードを入力"
+        onkeydown="if(event.key==='Enter')checkPw()">
+    </div>
+    <div id="pwErr" style="color:var(--red);font-size:12px;margin-top:4px;display:none;">パスワードが違います</div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closePwModal()">キャンセル</button>
+      <button class="btn btn-primary" onclick="checkPw()">ログイン</button>
+    </div>
+  </div>
+</div>
+
+<!-- 先生追加/編集モーダル -->
+<div class="overlay" id="tModal">
+  <div class="modal modal-lg">
+    <div class="modal-title" id="tModalTitle">予約を追加</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">日付</label>
+        <input type="date" class="form-control" id="t_date">
+      </div>
+      <div class="form-group">
+        <label class="form-label">校舎</label>
+        <select class="form-control" id="t_campus">
+          <option value="kyujyu_tsuko">九重本校（通塾）</option>
+          <option value="kyujyu_online">九重本校（オンライン）</option>
+          <option value="hita_tsuko">日田校（通塾）</option>
+          <option value="hita_online">日田校（オンライン）</option>
+          <option value="online">オンライン専用</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">コマ</label>
+        <input type="text" class="form-control" id="t_koma" placeholder="F G A ① ⅰ">
+      </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">生徒名</label>
+        <div class="input-wrap">
+          <input type="text" class="form-control" id="t_student" placeholder="名前を入力"
+            oninput="showSug(this.value,'t_sug','t_student')" onblur="setTimeout(()=>hideSug('t_sug'),160)">
+          <div class="suggestions" id="t_sug" style="display:none;"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">学年</label>
+        <select class="form-control" id="t_grade">
+          <option value="">未設定</option>
+          <optgroup label="小学生">
+            <option value="小1">小1</option><option value="小2">小2</option>
+            <option value="小3">小3</option><option value="小4">小4</option>
+            <option value="小5">小5</option><option value="小6">小6</option>
+          </optgroup>
+          <optgroup label="中学生">
+            <option value="中1">中1</option><option value="中2">中2</option>
+            <option value="中3">中3</option>
+          </optgroup>
+          <optgroup label="高校生">
+            <option value="高1">高1</option><option value="高2">高2</option>
+            <option value="高3">高3</option>
+          </optgroup>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">教科</label>
+        <select class="form-control" id="t_subject" onchange="toggleFreeSubj('t')">
+          <option value="">未入力</option>
+          <option>数学</option><option>英語</option><option>国語</option>
+          <option>理科</option><option>社会</option><option>算数</option>
+          <option>復習</option><option>テスト対策</option><option>英検</option>
+          <option>エジソン</option><option>その他</option>
+          <option value="__free__">✏️ 自由入力...</option>
+        </select>
+        <input type="text" class="form-control" id="t_subject_free" placeholder="教科を入力"
+          style="display:none;margin-top:6px;">
+      </div>
+      <div class="form-group">
+        <label class="form-label">メモ</label>
+        <input type="text" class="form-control" id="t_memo" placeholder="任意">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeTModal()">キャンセル</button>
+      <button class="btn btn-primary" onclick="saveTBooking()">💾 保存</button>
+    </div>
+  </div>
+</div>
+
+
+
+<script>
+// ===== 定数 =====
+const PW = 'matsuda2026';
+const DAYS = ['日','月','火','水','木','金','土'];
+const DAY_KEYS = ['mon','tue','wed','thu','fri'];
+const DAY_LABELS = {mon:'月',tue:'火',wed:'水',thu:'木',fri:'金',sat:'土'};
+
+const WEEKDAY_KOMAS = [
+  {koma:'F',time:'17:30〜18:20'},{koma:'G',time:'18:20〜19:10'},
+  {koma:'H',time:'19:10〜20:00'},{koma:'I',time:'20:00〜20:50'},
+  {koma:'J',time:'20:50〜21:40'},
+];
+const SAT_KOMAS = [
+  {koma:'A',time:'15:30〜16:20'},{koma:'B',time:'16:20〜17:10'},
+  {koma:'C',time:'17:10〜18:00'},{koma:'D',time:'18:00〜18:50'},
+  {koma:'E',time:'18:50〜19:40'},
+];
+
+// 校舎グループ定義
+const CAMPUS_GROUPS = {
+  kyujyu: ['kyujyu_tsuko','kyujyu_online'],
+  hita:   ['hita_tsuko','hita_online'],
+  online: ['online'],
+};
+const CAMPUS_LABEL = {
+  kyujyu_tsuko:'九重本校（通塾）', kyujyu_online:'九重本校（OL）',
+  hita_tsuko:'日田校（通塾）',    hita_online:'日田校（OL）',
+  online:'オンライン専用',
+};
+const CAMPUS_BADGE_CLS = {
+  kyujyu_tsuko:'b-k', kyujyu_online:'b-online',
+  hita_tsuko:'b-h',   hita_online:'b-online',
+  online:'b-ol',
+};
+// PDF出力時の校舎フィルタ
+const PDF_FILTER = {
+  kyujyu: ['kyujyu_tsuko','kyujyu_online'],
+  hita:   ['hita_tsuko','hita_online'],
+  online: ['online'],
+};
+const PDF_TITLE = {
+  kyujyu:'九重本校', hita:'日田校', online:'オンライン専用',
+};
+
+const KNOWN_STUDENTS = [
+  '井上凛音','恵藤幸太郎','赤峰颯希','小野桂宕','末長穂希','髙橋祐希',
+  '井上琉叶','森野々香','佐藤由衣','大久保真緒','日野真優','小埜琴音',
+  '篠田悠斗','合原友樹','井上瑛太','小山清志郎','髙村陽太','小埜優奈',
+  '綾部瑛太','吉弘侑史','梶原梛雄','松田光之助','髙平嘉樹','髙平圭悟',
+  '鶴田主矢','大庭永蒔','小野心美','阿部咲来','阿部宝斗','菊池大翔',
+  '宮崎紫帆','小野正貴','倉茂諒太','向井考','髙尾湊','中村愛佳',
+  '久保太造','井上瑠歌','佐藤哲平'
+];
+let studentList = [...KNOWN_STUDENTS];
+
+// ===== GAS連携（iframe+form方式・CORS完全回避）=====
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbzkoQ4E-MuUhn-DMihHjhKWTCykyxLZslyzZqoC3V6jaSjM8Kr-o8akTtlVRWCbu26vmA/exec';
+
+function gasCall(params){
+  return new Promise((resolve, reject)=>{
+    const id = 'gas_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+
+    // タイムアウト
+    const timer = setTimeout(()=>{
+      cleanup();
+      reject(new Error('タイムアウト'));
+    }, 25000);
+
+    function cleanup(){
+      delete window[id];
+      const el = document.getElementById(id);
+      if(el) el.remove();
+    }
+
+    // JSONPコールバック
+    window[id] = (data)=>{
+      clearTimeout(timer);
+      cleanup();
+      resolve(data);
+    };
+
+    // script タグで読み込み
+    const parts = ['callback=' + id];
+    for(const [k,v] of Object.entries(params)){
+      parts.push(k + '=' + encodeURIComponent(String(v)));
+    }
+    const url = GAS_URL + '?' + parts.join('&');
+    const s = document.createElement('script');
+    s.id = id;
+    s.type = 'text/javascript';
+    s.charset = 'utf-8';
+    s.src = url;
+    s.onerror = ()=>{ clearTimeout(timer); cleanup(); reject(new Error('読み込みエラー')); };
+    document.body.appendChild(s);
+  });
+}
+
+function showLoading(msg='読み込み中...'){
+  let el=document.getElementById('loadingOverlay');
+  if(!el){
+    el=document.createElement('div');
+    el.id='loadingOverlay';
+    el.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:9999;display:flex;align-items:center;justify-content:center;';
+    el.innerHTML=`<div style="background:white;border-radius:12px;padding:24px 32px;font-size:14px;font-weight:500;color:#374151;display:flex;align-items:center;gap:12px;">
+      <span style="display:inline-block;width:20px;height:20px;border:3px solid #e5e7eb;border-top-color:#2563eb;border-radius:50%;animation:spin .7s linear infinite;"></span>
+      <span id="loadingMsg">${msg}</span>
+    </div>`;
+    const style=document.createElement('style');
+    style.textContent='@keyframes spin{to{transform:rotate(360deg)}}';
+    document.head.appendChild(style);
+    document.body.appendChild(el);
+  }
+  document.getElementById('loadingMsg').textContent=msg;
+  el.style.display='flex';
+}
+function hideLoading(){ const el=document.getElementById('loadingOverlay'); if(el) el.style.display='none'; }
+
+// ===== データ =====
+let bookings = [];
+let editingId = null;
+
+async function loadBookings(){
+  showLoading('データを読み込み中...');
+  try {
+    const res = await gasCall({action:'getBookings'});
+    bookings = (res.bookings||[]).map(b=>{
+      // 日付を YYYY/MM/DD 形式に正規化
+      let date = b.date || '';
+      if(date && !/^\d{4}\/\d{2}\/\d{2}$/.test(date)){
+        const d = new Date(date);
+        if(!isNaN(d.getTime())){
+          const y = d.getFullYear();
+          const m = String(d.getMonth()+1).padStart(2,'0');
+          const day = String(d.getDate()).padStart(2,'0');
+          date = y+'/'+m+'/'+day;
+        }
+      }
+      return {...b, id:String(b.id), date};
+    });
+  } catch(e){ console.error('loadBookings error:',e); bookings=[]; }
+  hideLoading();
+}
+
+async function saveBooking(booking){
+  showLoading('保存中...');
+  try {
+    await gasCall({action:'saveBooking', data:JSON.stringify(booking)});
+    await loadBookings();
+    hideLoading();
+  } catch(e){
+    console.error('saveBooking error:', e);
+    alert('保存に失敗しました。\nエラー: ' + e.message);
+    hideLoading();
+  }
+}
+
+async function updateSubjectGas(id, subject){
+  showLoading('更新中...');
+  try {
+    await gasCall({action:'updateSubject', id, subject});
+    const b=bookings.find(x=>x.id===id);
+    if(b) b.subject=subject;
+  } catch(e){ alert('更新に失敗しました。'); }
+  hideLoading();
+}
+
+async function deleteBookingGas(id){
+  showLoading('削除中...');
+  try {
+    await gasCall({action:'deleteBooking', id});
+    bookings=bookings.filter(b=>b.id!==id);
+  } catch(e){ alert('削除に失敗しました。'); }
+  hideLoading();
+}
+
+// ===== 週状態 =====
+let weeks = {s:getNextMon(), t:getMon(new Date()), v:getMon(new Date())};
+
+// ===== 生徒状態 =====
+let selectedCampus = null;
+let selections = {};
+let activeCell = null;
+function getMon(d){ const dt=new Date(d),day=dt.getDay(),diff=day===0?-6:1-day; dt.setDate(dt.getDate()+diff); dt.setHours(0,0,0,0); return dt; }
+function getNextMon(){ const d=getMon(new Date()); d.setDate(d.getDate()+7); return d; }
+function pad(n){ return String(n).padStart(2,'0'); }
+function fmt(d){ return `${d.getFullYear()}/${pad(d.getMonth()+1)}/${pad(d.getDate())}`; }
+function fmtJP(d){ return `${d.getMonth()+1}月${d.getDate()}日（${DAYS[d.getDay()]}）`; }
+function weekDates(mon){ return Array.from({length:6},(_,i)=>{ const d=new Date(mon); d.setDate(d.getDate()+i); return d; }); }
+function weekRange(mon){ const ds=weekDates(mon); const s=ds[0],e=ds[5]; return `${s.getMonth()+1}/${s.getDate()}（月）〜 ${e.getMonth()+1}/${e.getDate()}（土）`; }
+function isOpen(targetMon){ const now=new Date(),dl=new Date(targetMon); dl.setDate(dl.getDate()-2); dl.setHours(20,0,0,0); return now<=dl; }
+function deadlineStr(targetMon){ const d=new Date(targetMon); d.setDate(d.getDate()-2); return `${d.getMonth()+1}月${d.getDate()}日（土）20:00`; }
+
+// ===== 画面切替 =====
+function showScreen(id){
+  document.getElementById('topScreen').style.display='none';
+  ['studentScreen','teacherScreen','viewScreen'].forEach(s=>{
+    document.getElementById(s).className='screen'+(s===id?' active':'');
+  });
+}
+function goTop(){
+  document.getElementById('topScreen').style.display='';
+  ['studentScreen','teacherScreen','viewScreen'].forEach(s=>{document.getElementById(s).className='screen';});
+}
+async function enterStudent(){ showScreen('studentScreen'); weeks.s=getNextMon(); resetStudentState(); renderStudent(); }
+async function enterView(){ showScreen('viewScreen'); weeks.v=getNextMon(); await loadBookings(); renderView(); }
+async function enterTeacher(){ showScreen('teacherScreen'); weeks.t=getMon(new Date()); await loadBookings(); renderTeacher(); }
+
+// ===== 週ナビ =====
+async function changeWeek(mode,delta){
+  weeks[mode].setDate(weeks[mode].getDate()+delta*7);
+  if(mode==='s'){resetStudentState();renderStudent();}
+  else if(mode==='t'){await loadBookings();renderTeacher();}
+  else{await loadBookings();renderView();}
+}
+function setNextWeek(){ weeks.s=getNextMon(); resetStudentState(); renderStudent(); }
+async function setCurrentWeek(m){ weeks[m]=getMon(new Date()); if(m==='t'){await loadBookings();renderTeacher();}else{await loadBookings();renderView();} }
+
+// ===== PW =====
+function openPwModal(){ document.getElementById('pwInput').value=''; document.getElementById('pwErr').style.display='none'; document.getElementById('pwModal').classList.add('on'); setTimeout(()=>document.getElementById('pwInput').focus(),80); }
+function closePwModal(){ document.getElementById('pwModal').classList.remove('on'); }
+function checkPw(){ if(document.getElementById('pwInput').value===PW){ closePwModal(); enterTeacher(); } else { document.getElementById('pwErr').style.display='block'; } }
+
+// ===== 生徒状態リセット =====
+function resetStudentState(){
+  selectedCampus=null; selections={};
+  ['kyujyu','hita','online'].forEach(c=>document.getElementById('cb_'+c).className='campus-btn');
+  document.getElementById('campus_hint').style.display='none';
+  document.getElementById('online_hint').style.display='none';
+}
+
+// ===== 校舎選択（コマごとにtsuko/online選ぶ方式） =====
+function selectCampus(campus){
+  selectedCampus=campus; selections={};
+  ['kyujyu','hita','online'].forEach(c=>{
+    document.getElementById('cb_'+c).className='campus-btn'+(c===campus?' active-'+c:'');
+  });
+  // ヒント表示
+  document.getElementById('campus_hint').style.display = campus!=='online' ? '' : 'none';
+  document.getElementById('online_hint').style.display = campus==='online' ? '' : 'none';
+  const dates=weekDates(weeks.s);
+  renderWeekGrid(dates); renderSatGrid(dates[5]);
+}
+
+// ===== 生徒画面レンダリング =====
+function renderStudent(){
+  document.getElementById('s_weekText').textContent=weekRange(weeks.s);
+  const open=isOpen(weeks.s);
+  const banner=document.getElementById('s_banner');
+  banner.innerHTML=open
+    ?`<div class="banner b-open">✅ 入力受付中 ｜ 締切：${deadlineStr(weeks.s)}</div>`
+    :`<div class="banner b-closed">🔒 この週の入力締切は終了しました</div>`;
+  document.getElementById('s_submitBtn').disabled=!open;
+  document.getElementById('s_form').style.display='';
+  document.getElementById('s_done').style.display='none';
+  const dates=weekDates(weeks.s);
+  renderWeekGrid(dates); renderSatGrid(dates[5]);
+}
+
+function renderWeekGrid(dates){
+  let html='';
+  WEEKDAY_KOMAS.forEach(({koma,time})=>{
+    html+=`<tr><td class="time-cell"><span class="koma-lbl">${koma}</span><span class="time-lbl">${time}</span></td>`;
+    DAY_KEYS.forEach(dk=>{
+      const key=`${dk}_${koma}`, sel=selections[key];
+      const cls=sel?`sel-${sel}`:'';
+      const icon=sel==='tsuko'?'🏫':sel==='online'?'💻':'○';
+      const lbl=sel==='tsuko'?'通塾':sel==='online'?'OL':'';
+      const dim=!selectedCampus?'opacity:.3;cursor:not-allowed;':'';
+      html+=`<td><button class="check-btn ${cls}" style="${dim}" onclick="tapCell(event,'${key}')"><span class="check-icon">${icon}</span><span class="check-lbl">${lbl}</span></button></td>`;
+    });
+    html+='</tr>';
+  });
+  document.getElementById('s_weekBody').innerHTML=html;
+}
+
+function renderSatGrid(){
+  let html='';
+  SAT_KOMAS.forEach(({koma,time})=>{
+    const key=`sat_${koma}`, sel=selections[key];
+    const cls=sel?`sel-${sel}`:'';
+    const icon=sel==='tsuko'?'🏫':sel==='online'?'💻':'○';
+    const lbl=sel==='tsuko'?'通塾':sel==='online'?'OL':'';
+    const dim=!selectedCampus?'opacity:.3;cursor:not-allowed;':'';
+    html+=`<tr><td class="time-cell"><span class="koma-lbl">${koma}</span><span class="time-lbl">${time}</span></td>
+      <td><button class="check-btn ${cls}" style="${dim}" onclick="tapCell(event,'${key}')"><span class="check-icon">${icon}</span><span class="check-lbl">${lbl}</span></button></td></tr>`;
+  });
+  document.getElementById('s_satBody').innerHTML=html;
+}
+
+// ===== コマタップ→ポップアップ =====
+function tapCell(e, key){
+  if(!selectedCampus){ alert('まず校舎を選んでください'); return; }
+  e.stopPropagation();
+  activeCell=key;
+  const popup=document.getElementById('typePopup');
+
+  // オンライン専用校舎はtsuko選択肢を隠す
+  const tsukoBtn=popup.querySelector('.tp-tsuko');
+  tsukoBtn.style.display=selectedCampus==='online'?'none':'';
+
+  // ポップアップ位置：ボタン直下に表示、画面端を考慮
+  const rect=e.currentTarget.getBoundingClientRect();
+  const popW=140, popH=selectedCampus==='online'?80:130;
+  let top=rect.bottom+4, left=rect.left;
+  if(top+popH>window.innerHeight) top=rect.top-popH-4;
+  if(left+popW>window.innerWidth) left=window.innerWidth-popW-8;
+  popup.style.top=top+'px';
+  popup.style.left=left+'px';
+  popup.classList.add('show');
+}
+
+function selectType(type){
+  if(!activeCell)return;
+  if(type==='clear') delete selections[activeCell];
+  else {
+    // オンライン専用校舎は強制online
+    selections[activeCell] = selectedCampus==='online' ? 'online' : type;
+  }
+  closePopup();
+  const dates=weekDates(weeks.s);
+  renderWeekGrid(dates); renderSatGrid();
+}
+function closePopup(){ document.getElementById('typePopup').classList.remove('show'); activeCell=null; }
+document.addEventListener('click', e=>{
+  const popup=document.getElementById('typePopup');
+  if(popup&&!popup.contains(e.target)) closePopup();
+});
+
+// ===== 送信 =====
+function getCampusKey(mode){
+  if(selectedCampus==='online') return 'online';
+  return selectedCampus+'_'+mode; // mode='tsuko'|'online'
+}
+
+async function submitStudent(){
+  const name=document.getElementById('s_name').value.trim();
+  const grade=document.getElementById('s_grade').value;
+  if(!name){alert('お名前を入力してください');return;}
+  if(!grade){alert('学年を選択してください');return;}
+  if(!selectedCampus){alert('校舎を選んでください');return;}
+  const selected=Object.entries(selections).filter(([,v])=>v);
+  if(!selected.length){alert('コマを1つ以上選択してください');return;}
+
+  const request=document.getElementById('s_request').value.trim();
+  const dates=weekDates(weeks.s);
+  const dayDateMap={mon:dates[0],tue:dates[1],wed:dates[2],thu:dates[3],fri:dates[4],sat:dates[5]};
+
+  showLoading('送信中...');
+  try {
+    for(const [key,mode] of selected){
+      const parts=key.split('_'), dk=parts[0], koma=parts[1];
+      const date=fmt(dayDateMap[dk]);
+      const campusKey=getCampusKey(mode);
+      const booking={id:Date.now().toString()+'_'+Math.random().toString(36).slice(2),date,campus:campusKey,koma,student:name,grade,subject:'',memo:request};
+      await gasCall({action:'saveBooking', data:JSON.stringify(booking)});
+    }
+    if(!studentList.includes(name))studentList.push(name);
+    await loadBookings();
+  } catch(e){ alert('送信に失敗しました。通信環境を確認してください。'); hideLoading(); return; }
+  hideLoading();
+
+  // サマリ
+  let sumHtml=`<div class="sum-title">📋 ${name} さんの予約内容</div>`;
+  const ORDER=['mon','tue','wed','thu','fri','sat'];
+  selected.sort((a,b)=>ORDER.indexOf(a[0].split('_')[0])-ORDER.indexOf(b[0].split('_')[0])).forEach(([key,mode])=>{
+    const parts=key.split('_');
+    const campusKey=getCampusKey(mode);
+    const modeLabel=mode==='tsuko'?'通塾':'OL';
+    const modeColor=mode==='tsuko'?'var(--blue)':'var(--green)';
+    sumHtml+=`<div class="sum-row">
+      <span class="s-day">${DAY_LABELS[parts[0]]}</span>
+      <span class="s-koma">${parts[1]}</span>
+      <span class="s-type" style="background:${modeColor};color:white;">${modeLabel}</span>
+      <span style="font-size:11px;color:var(--gray-500);">${CAMPUS_LABEL[campusKey]||campusKey}</span>
+    </div>`;
+  });
+  if(request)sumHtml+=`<div style="margin-top:10px;font-size:12px;background:white;padding:8px 10px;border-radius:6px;color:var(--gray-700);">💬 ${request}</div>`;
+  document.getElementById('s_summary').innerHTML=sumHtml;
+  document.getElementById('s_form').style.display='none';
+  document.getElementById('s_done').style.display='';
+}
+
+function resetStudent(){
+  selections={}; selectedCampus=null;
+  document.getElementById('s_name').value='';
+  document.getElementById('s_grade').value='';
+  document.getElementById('s_request').value='';
+  weeks.s=getNextMon();
+  resetStudentState();
+  renderStudent();
+}
+
+// ===== 先生画面 =====
+function renderTeacher(){
+  document.getElementById('t_weekText').textContent=weekRange(weeks.t);
+  const keys=weekDates(weeks.t).map(fmt);
+  const wb=bookings.filter(b=>keys.includes(b.date));
+  const el=document.getElementById('t_list');
+  if(!wb.length){el.innerHTML='<div class="bc"><div class="empty">この週の予約はありません</div></div>';return;}
+
+  // 生徒別にグループ化
+  const byStudent={};
+  wb.forEach(b=>{
+    if(!byStudent[b.student]) byStudent[b.student]={grade:b.grade||'',entries:[]};
+    if(b.grade) byStudent[b.student].grade=b.grade;
+    byStudent[b.student].entries.push(b);
+  });
+
+  // 学年順にソート
+  const sortedStudents=Object.keys(byStudent).sort((a,b)=>
+    gradeSort({student:a,grade:byStudent[a].grade},{student:b,grade:byStudent[b].grade})
+  );
+
+  const DAY_ORDER=['月','火','水','木','金','土'];
+  function dayIdx(dateStr){
+    const d=new Date(dateStr.replace(/\//g,'-'));
+    return DAY_ORDER.indexOf(DAYS[d.getDay()]);
+  }
+
+  let html='';
+  sortedStudents.forEach(student=>{
+    const {grade,entries}=byStudent[student];
+    entries.sort((a,b)=>{ const di=dayIdx(a.date)-dayIdx(b.date); return di!==0?di:komaSort(a.koma,b.koma); });
+
+    html+=`<div class="bc">
+      <div class="bc-head">
+        <div class="bc-title">👤 <strong>${student}</strong>${grade?` <span class="badge b-k" style="font-size:11px;">${grade}</span>`:''}</div>
+      </div>
+      <table class="bt">
+        <thead><tr><th>曜日</th><th>コマ</th><th>時間</th><th>校舎</th><th>教科</th><th>メモ</th><th></th></tr></thead>
+        <tbody>`;
+    entries.forEach(b=>{
+      const d=new Date(b.date.replace(/\//g,'-'));
+      html+=`<tr>
+        <td style="font-weight:600;color:var(--gray-700);">${DAYS[d.getDay()]}曜</td>
+        <td><span class="koma">${b.koma}</span></td>
+        <td style="font-size:11px;color:var(--gray-500);white-space:nowrap;">${KOMA_TIME[b.koma]||''}</td>
+        <td><span class="badge ${CAMPUS_BADGE_CLS[b.campus]||'b-ol'}" style="font-size:11px;">${CAMPUS_LABEL[b.campus]||b.campus}</span></td>
+        <td>
+          <select class="subj-sel" id="ss_${b.id}" onchange="quickSubj('${b.id}')">
+            <option value="">未入力</option>
+            ${['数学','英語','国語','理科','社会','算数','復習','テスト対策','英検','エジソン','その他'].map(s=>`<option${b.subject===s?' selected':''}>${s}</option>`).join('')}
+            <option value="__free__"${!['数学','英語','国語','理科','社会','算数','復習','テスト対策','英検','エジソン','その他',''].includes(b.subject)?' selected':''}>✏️ 自由入力...</option>
+          </select>
+          <input type="text" class="subj-free" id="sf_${b.id}" placeholder="自由入力"
+            style="display:${!['数学','英語','国語','理科','社会','算数','復習','テスト対策','英検','エジソン','その他',''].includes(b.subject)?'block':'none'};margin-top:4px;width:110px;padding:3px 6px;border:1.5px solid var(--gray-200);border-radius:6px;font-size:12px;font-family:inherit;"
+            value="${!['数学','英語','国語','理科','社会','算数','復習','テスト対策','英検','エジソン','その他',''].includes(b.subject)?b.subject:''}"
+            onchange="quickSubjFree('${b.id}')">
+        </td>
+        <td style="color:var(--gray-400);font-size:12px;">${b.memo||''}</td>
+        <td><div style="display:flex;gap:4px;">
+          <button class="btn btn-outline btn-sm" style="padding:4px 7px;" onclick="teacherEdit('${b.id}')">✏️</button>
+          <button class="btn btn-danger btn-sm" style="padding:4px 7px;" onclick="delBooking('${b.id}')">🗑</button>
+        </div></td>
+      </tr>`;
+    });
+    html+=`</tbody></table></div>`;
+  });
+  el.innerHTML=html;
+}
+
+async function quickSubj(id){
+  const sel=document.getElementById('ss_'+id);
+  const freeEl=document.getElementById('sf_'+id);
+  if(sel.value==='__free__'){
+    if(freeEl) freeEl.style.display='block';
+    return;
+  }
+  if(freeEl) freeEl.style.display='none';
+  await updateSubjectGas(id, sel.value);
+}
+async function quickSubjFree(id){
+  const val=document.getElementById('sf_'+id).value.trim();
+  await updateSubjectGas(id, val);
+}
+function toggleFreeSubj(prefix){
+  const sel=document.getElementById(prefix+'_subject');
+  const freeEl=document.getElementById(prefix+'_subject_free');
+  if(!freeEl)return;
+  if(sel.value==='__free__'){freeEl.style.display='';setTimeout(()=>freeEl.focus(),50);}
+  else freeEl.style.display='none';
+}
+function getSubjectValue(prefix){
+  const sel=document.getElementById(prefix+'_subject');
+  if(sel.value==='__free__'){
+    return document.getElementById(prefix+'_subject_free').value.trim();
+  }
+  return sel.value;
+}
+async function delBooking(id){
+  if(!confirm('この予約を削除しますか？'))return;
+  await deleteBookingGas(id);
+  renderTeacher();
+}
+
+function openTeacherAdd(){
+  editingId=null;
+  document.getElementById('tModalTitle').textContent='予約を追加';
+  document.getElementById('t_date').value=fmt(weeks.t).replace(/\//g,'-');
+  document.getElementById('t_campus').value='kyujyu_tsuko';
+  document.getElementById('t_koma').value='';
+  document.getElementById('t_student').value='';
+  document.getElementById('t_grade').value='';
+  document.getElementById('t_subject').value='';
+  document.getElementById('t_subject_free').style.display='none';
+  document.getElementById('t_subject_free').value='';
+  document.getElementById('t_memo').value='';
+  document.getElementById('tModal').classList.add('on');
+  setTimeout(()=>document.getElementById('t_student').focus(),80);
+}
+function closeTModal(){ document.getElementById('tModal').classList.remove('on'); }
+
+function teacherEdit(id){
+  const b=bookings.find(x=>x.id===id); if(!b)return;
+  editingId=id;
+  document.getElementById('tModalTitle').textContent='予約を編集';
+  document.getElementById('t_date').value=b.date.replace(/\//g,'-');
+  document.getElementById('t_campus').value=b.campus;
+  document.getElementById('t_koma').value=b.koma;
+  document.getElementById('t_student').value=b.student;
+  document.getElementById('t_grade').value=b.grade||'';
+  const PRESET_SUBJECTS=['数学','英語','国語','理科','社会','算数','復習','テスト対策','英検','エジソン','その他',''];
+  if(PRESET_SUBJECTS.includes(b.subject||'')){
+    document.getElementById('t_subject').value=b.subject||'';
+    document.getElementById('t_subject_free').style.display='none';
+  } else {
+    document.getElementById('t_subject').value='__free__';
+    document.getElementById('t_subject_free').style.display='';
+    document.getElementById('t_subject_free').value=b.subject||'';
+  }
+  document.getElementById('t_memo').value=b.memo||'';
+  document.getElementById('tModal').classList.add('on');
+}
+
+async function saveTBooking(){
+  const dateRaw=document.getElementById('t_date').value;
+  const campus=document.getElementById('t_campus').value;
+  const koma=document.getElementById('t_koma').value.trim();
+  const student=document.getElementById('t_student').value.trim();
+  const grade=document.getElementById('t_grade').value;
+  const subject=getSubjectValue('t');
+  const memo=document.getElementById('t_memo').value.trim();
+  if(!dateRaw||!koma||!student){alert('日付・コマ・生徒名は必須です');return;}
+  const date=dateRaw.replace(/-/g,'/');
+  const id = editingId || Date.now().toString();
+  const booking={id,date,campus,koma,student,grade,subject,memo};
+  if(!studentList.includes(student))studentList.push(student);
+  closeTModal();
+  await saveBooking(booking);
+  renderTeacher();
+}
+
+// ===== 確認画面 =====
+function renderView(){
+  document.getElementById('v_weekText').textContent=weekRange(weeks.v);
+  const name=(document.getElementById('v_name')||{}).value||'';
+  const keys=weekDates(weeks.v).map(fmt);
+  const el=document.getElementById('v_list');
+
+  // 名前未入力
+  if(!name.trim()){
+    el.innerHTML='<div class="bc"><div class="empty">👆 お名前を入力すると予定が表示されます</div></div>';
+    return;
+  }
+
+  // 名前一致 & 教科入力済みのみ
+  const wb=bookings.filter(b=>keys.includes(b.date) && b.subject && b.student.replace(/\s/g,'')===name.trim().replace(/\s/g,''));
+
+  if(!wb.length){
+    el.innerHTML=`<div class="bc"><div class="empty">📋 <strong>${name}</strong> さんの確定済み予定はまだありません<br><small style="font-size:12px;color:var(--gray-400);">先生が教科を入力すると表示されます</small></div></div>`;
+    return;
+  }
+
+  // 日付順に表示
+  const byDay={};
+  wb.forEach(b=>{if(!byDay[b.date])byDay[b.date]=[];byDay[b.date].push(b);});
+
+  let html=`<div style="font-size:13px;font-weight:600;color:var(--gray-700);margin-bottom:10px;">${name} さんの授業予定</div>`;
+  Object.keys(byDay).sort().forEach(dateKey=>{
+    const d=new Date(dateKey.replace(/\//g,'-'));
+    const list=byDay[dateKey].sort((a,b)=>komaSort(a.koma,b.koma));
+    html+=`<div class="bc" style="margin-bottom:10px;">
+      <div class="bc-head"><div class="bc-title">📅 ${fmtJP(d)}</div></div>
+      <table class="bt"><thead><tr><th>コマ</th><th>時間</th><th>校舎</th><th>教科</th></tr></thead><tbody>`;
+    list.forEach(b=>{
+      html+=`<tr>
+        <td><span class="koma">${b.koma}</span></td>
+        <td style="font-size:12px;color:var(--gray-500);">${KOMA_TIME[b.koma]||''}</td>
+        <td><span class="badge ${CAMPUS_BADGE_CLS[b.campus]||'b-ol'}" style="font-size:11px;">${CAMPUS_LABEL[b.campus]||b.campus}</span></td>
+        <td><span class="subj ${subjCls(b.subject)}">${b.subject}</span></td>
+      </tr>`;
+    });
+    html+=`</tbody></table></div>`;
+  });
+  el.innerHTML=html;
+}
+
+// ===== 生徒・保護者用PDF印刷（スマホはダウンロード） =====
+function printStudentSchedule(){
+  const name=(document.getElementById('v_name')||{}).value||'';
+  if(!name.trim()){alert('お名前を入力してください');return;}
+  const keys=weekDates(weeks.v).map(fmt);
+  const wb=bookings.filter(b=>keys.includes(b.date)&&b.subject&&b.student===name.trim());
+  if(!wb.length){alert(`${name} さんの確定済み予定がありません`);return;}
+
+  const range=weekRange(weeks.v);
+  const byDay={};
+  wb.forEach(b=>{if(!byDay[b.date])byDay[b.date]=[];byDay[b.date].push(b);});
+
+  let body='';
+  Object.keys(byDay).sort().forEach(dateKey=>{
+    const d=new Date(dateKey.replace(/\//g,'-'));
+    const list=byDay[dateKey].sort((a,b)=>komaSort(a.koma,b.koma));
+    body+=`<div class="day">
+      <div class="day-title">📅 ${fmtJP(d)}</div>
+      <table><thead><tr><th>コマ</th><th>時間</th><th>校舎</th><th>教科</th></tr></thead><tbody>`;
+    list.forEach(b=>{
+      body+=`<tr>
+        <td class="koma-c">${b.koma}</td>
+        <td class="time-c">${KOMA_TIME[b.koma]||''}</td>
+        <td>${CAMPUS_LABEL[b.campus]||b.campus}</td>
+        <td class="subj-c">${b.subject}</td>
+      </tr>`;
+    });
+    body+=`</tbody></table></div>`;
+  });
+
+  const html=`<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8">
+  <title>マツダ塾 授業予定 ${name}</title>
+  <style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap');
+  body{font-family:'Noto Sans JP',sans-serif;font-size:12px;margin:20px;color:#111;}
+  .header-bar{border-left:5px solid #2563eb;padding:3px 10px;margin-bottom:3px;}
+  h1{font-size:15px;font-weight:700;color:#2563eb;}
+  .name{font-size:18px;font-weight:700;margin:8px 0 2px;}
+  .sub{font-size:10px;color:#666;margin-bottom:16px;}
+  .day{margin-bottom:18px;page-break-inside:avoid;}
+  .day-title{background:#1e40af;color:white;padding:6px 12px;font-weight:700;border-radius:5px 5px 0 0;font-size:12px;}
+  table{width:100%;border-collapse:collapse;border:1px solid #d1d5db;}
+  th{background:#f3f4f6;padding:5px 10px;text-align:left;font-size:10px;font-weight:700;color:#6b7280;border:1px solid #d1d5db;}
+  td{padding:7px 10px;border:1px solid #e5e7eb;}
+  .koma-c{font-weight:700;color:#1e40af;width:36px;text-align:center;}
+  .time-c{color:#6b7280;font-size:11px;width:110px;}
+  .subj-c{font-weight:700;color:#1e40af;}
+  </style></head><body>
+  <div class="header-bar"><h1>マツダ塾 授業予定表</h1></div>
+  <div class="name">${name} さん</div>
+  <div class="sub">${range} ／ 出力：${new Date().toLocaleString('ja-JP')}</div>
+  ${body}
+  </body></html>`;
+
+  // スマホ判定：タッチデバイスまたは画面幅600px以下はダウンロード
+  const isMobile = ('ontouchstart' in window) || window.innerWidth <= 600;
+  if(isMobile){
+    // Blobでダウンロード
+    const blob=new Blob([html],{type:'text/html;charset=utf-8'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;
+    a.download=`マツダ塾_${name}_授業予定.html`;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(()=>{ URL.revokeObjectURL(url); document.body.removeChild(a); },1000);
+  } else {
+    // PCは新しいタブで印刷
+    const win=window.open('','_blank');
+    win.document.write(html.replace('</body>','<script>window.onload=()=>window.print();<\/script></body>'));
+    win.document.close();
+  }
+}
+// ===== PDF出力（校舎別・元スタイル） =====
+function printCampus(campusGroup){
+  const filter=PDF_FILTER[campusGroup];
+  const title=PDF_TITLE[campusGroup];
+  const keys=weekDates(weeks.t).map(fmt);
+  const wb=bookings.filter(b=>keys.includes(b.date)&&filter.includes(b.campus));
+  if(!wb.length){alert(`${title}の予約データがありません`);return;}
+
+  const range=weekRange(weeks.t);
+  const colorMap={kyujyu:'#1e40af', hita:'#15803d', online:'#6d28d9'};
+  const accentColor=colorMap[campusGroup]||'#111';
+
+  // 日付ごとにグループ化
+  const byDay={};
+  wb.forEach(b=>{
+    if(!byDay[b.date])byDay[b.date]={};
+    if(!byDay[b.date][b.campus])byDay[b.date][b.campus]=[];
+    byDay[b.date][b.campus].push(b);
+  });
+
+  // 校舎グループ内の通塾系・オンライン系を分類
+  const TSUKO_CAMPS  = filter.filter(c=>c.endsWith('_tsuko'));
+  const ONLINE_CAMPS = filter.filter(c=>c.endsWith('_online')||c==='online');
+
+  // コマ定義（その日に存在するコマを動的に取得）
+  const ALL_KOMAS = ['A','B','C','D','E','F','G','H','I','J'];
+
+  function buildSection(dayData, campusList, sectionLabel, komas){
+    // 該当campusの全bookingを収集
+    let entries=[];
+    campusList.forEach(camp=>{ if(dayData[camp]) entries=entries.concat(dayData[camp]); });
+    if(!entries.length) return '';
+
+    // 学年順→同学年内は名前順でユニーク生徒リスト
+    const studentMap={}; // student -> { grade, koma->subject }
+    entries.forEach(b=>{
+      if(!studentMap[b.student]) studentMap[b.student]={grade:b.grade||'',subjects:{}};
+      if(b.grade) studentMap[b.student].grade=b.grade;
+      studentMap[b.student].subjects[b.koma]=b.subject||'';
+    });
+
+    // 使用コマ（この日この区分で使われているコマのみ）
+    const usedKomas=komas.filter(k=>entries.some(b=>b.koma===k));
+    if(!usedKomas.length) return '';
+
+    // 生徒を学年順にソート
+    const students=Object.entries(studentMap)
+      .map(([name,v])=>({student:name,grade:v.grade,subjects:v.subjects}))
+      .sort(gradeSort);
+
+    // ヘッダー行：コマ記号 + 時間
+    let thead=`<tr><th class="col-grade">学年</th><th class="col-name">名前</th>`;
+    usedKomas.forEach(k=>{
+      thead+=`<th class="col-koma">${k}<br><span class="koma-time">${(KOMA_TIME[k]||'').replace('〜','～')}</span></th>`;
+    });
+    thead+=`</tr>`;
+
+    // 生徒行
+    let tbody='';
+    students.forEach(s=>{
+      tbody+=`<tr><td class="col-grade">${s.grade}</td><td class="col-name">${s.student}</td>`;
+      usedKomas.forEach(k=>{
+        tbody+=`<td class="col-subj">${s.subjects[k]||''}</td>`;
+      });
+      tbody+=`</tr>`;
+    });
+
+    return `<div class="section">
+      <div class="section-label">${sectionLabel}</div>
+      <table><thead>${thead}</thead><tbody>${tbody}</tbody></table>
+    </div>`;
+  }
+
+  let body='';
+  Object.keys(byDay).sort().forEach(dateKey=>{
+    const d=new Date(dateKey.replace(/\//g,'-'));
+    const dayData=byDay[dateKey];
+
+    // この日に実際に使われているコマを確認
+    const allEntries=Object.values(dayData).flat();
+    const dayKomas=ALL_KOMAS.filter(k=>allEntries.some(b=>b.koma===k));
+
+    let sections='';
+    if(TSUKO_CAMPS.length){
+      sections+=buildSection(dayData, TSUKO_CAMPS, '通塾', dayKomas);
+    }
+    if(ONLINE_CAMPS.length){
+      sections+=buildSection(dayData, ONLINE_CAMPS, 'オンライン', dayKomas);
+    }
+    if(!sections) return;
+
+    body+=`<div class="day">
+      <div class="day-title" style="background:${accentColor};">📅 ${fmtJP(d)}</div>
+      ${sections}
+    </div>`;
+  });
+
+  if(!body){ alert(`${title}の表示データがありません`); return; }
+
+  const win=window.open('','_blank');
+  win.document.write(`<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8">
+  <title>マツダ塾 ${title} 授業予定</title>
+  <style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap');
+  body{font-family:'Noto Sans JP',sans-serif;font-size:12px;margin:16px 20px;color:#111;}
+  .header-bar{border-left:5px solid ${accentColor};padding:3px 10px;margin-bottom:3px;}
+  h1{font-size:15px;font-weight:700;color:${accentColor};}
+  .sub{font-size:10px;color:#666;margin-bottom:16px;}
+  .day{margin-bottom:22px;page-break-inside:avoid;}
+  .day-title{color:white;padding:6px 12px;font-weight:700;border-radius:5px 5px 0 0;font-size:12px;}
+  .section{margin-bottom:6px;}
+  .section-label{background:#e5e7eb;padding:4px 10px;font-size:11px;font-weight:700;color:#374151;border-bottom:1px solid #d1d5db;}
+  table{width:100%;border-collapse:collapse;border:1px solid #d1d5db;}
+  th{background:#f3f4f6;padding:5px 8px;text-align:center;font-size:10px;font-weight:700;color:#374151;border:1px solid #d1d5db;}
+  td{padding:6px 8px;border:1px solid #e5e7eb;font-size:11px;}
+  .col-grade{width:36px;text-align:center;font-weight:700;color:#374151;background:#fafafa;}
+  .col-name{min-width:80px;font-weight:700;}
+  .col-koma{min-width:72px;text-align:center;}
+  .col-subj{text-align:center;color:#1e40af;font-weight:500;}
+  .koma-time{font-size:9px;font-weight:400;color:#6b7280;}
+  tr:nth-child(even) td{background:#fafafa;}
+  </style></head><body>
+  <div class="header-bar"><h1>マツダ塾 ${title} 授業予定表</h1></div>
+  <div class="sub">${range} ／ 出力：${new Date().toLocaleString('ja-JP')}</div>
+  ${body}
+  <script>window.onload=()=>window.print();<\/script>
+  </body></html>`);
+  win.document.close();
+}
+
+// ===== サジェスト =====
+function showSug(val,sugId,inputId){
+  if(!val){hideSug(sugId);return;}
+  const m=studentList.filter(s=>s.includes(val));
+  if(!m.length){hideSug(sugId);return;}
+  const el=document.getElementById(sugId);
+  el.innerHTML=m.map(s=>`<div class="sug-item" onmousedown="pickSug('${s}','${inputId}','${sugId}')">${s}</div>`).join('');
+  el.style.display='block';
+}
+function hideSug(id){ document.getElementById(id).style.display='none'; }
+function pickSug(name,inputId,sugId){ document.getElementById(inputId).value=name; hideSug(sugId); }
+
+// ===== 学年ソート =====
+const GRADE_ORDER = ['小1','小2','小3','小4','小5','小6','中1','中2','中3','高1','高2','高3'];
+function gradeSort(a, b){
+  const ai = GRADE_ORDER.indexOf(a.grade||''), bi = GRADE_ORDER.indexOf(b.grade||'');
+  const av = ai===-1 ? 99 : ai, bv = bi===-1 ? 99 : bi;
+  if(av!==bv) return av-bv;
+  return (a.student||'').localeCompare(b.student||'','ja');
+}
+
+// コマ→時間マップ
+const KOMA_TIME = {
+  A:'15:30〜16:20', B:'16:20〜17:10', C:'17:10〜18:00', D:'18:00〜18:50', E:'18:50〜19:40',
+  F:'17:30〜18:20', G:'18:20〜19:10', H:'19:10〜20:00', I:'20:00〜20:50', J:'20:50〜21:40',
+};
+function komaLabel(k){ return KOMA_TIME[k] ? `${k}　${KOMA_TIME[k]}` : k; }
+
+// ===== コマソート =====
+function komaSort(a,b){
+  const o=['A','B','C','D','E','F','G','H','I','J','①','②','③','④','⑤','⑥','⑦','⑧','⑨','⑩','ⅰ','ⅱ','ⅲ','ⅳ','ⅴ','ⅵ','ⅶ','ⅷ','ⅸ','ⅹ'];
+  const ai=o.indexOf(a),bi=o.indexOf(b);
+  if(ai!==-1&&bi!==-1)return ai-bi;
+  if(ai!==-1)return -1;if(bi!==-1)return 1;
+  return(parseInt(a)||0)-(parseInt(b)||0);
+}
+function subjCls(s){ return{数学:'sm',英語:'se',算数:'sm',国語:'sj',理科:'ss',社会:'sso'}[s]||'so'; }
+
+// モーダル外クリック
+document.querySelectorAll('.overlay').forEach(el=>{
+  el.addEventListener('click',function(e){if(e.target===this)this.classList.remove('on');});
+});
+</script>
+</body>
+</html>
